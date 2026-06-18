@@ -42,7 +42,7 @@ platform-objs-y += platform.o
 # platform-objs-y += <dt file name>.o
 
 # Optional parameter for path to external FDT
-# FW_FDT_PATH="path to platform flattened device tree file"
+FW_FDT_PATH=platform/hawks/hawks.dtb
 
 #
 # Dynamic firmware configuration.

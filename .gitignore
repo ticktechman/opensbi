@@ -6,6 +6,7 @@
 !.gitignore
 !.github
 !.editorconfig
+compile_commands.json
 
 # Object files
 *.o
