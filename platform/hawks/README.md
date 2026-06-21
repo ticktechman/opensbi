@@ -1,0 +1,5 @@
+# build kernel image
+- linux kernel : https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.12.39.tar.xz
+- config: hawks.config
+- build command: `make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- KCFLAGS="-march=rv64ima_zicsr_zifencei -mabi=lp64" -j4`
+- copy image(`arch/riscv/boot/Image`) to `platform/hawks/`
