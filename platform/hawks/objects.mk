@@ -89,8 +89,8 @@ FW_PAYLOAD_OFFSET=0x400000
 else
 FW_PAYLOAD_OFFSET=0x200000
 endif
-# FW_PAYLOAD_ALIGN=0x1000
-# FW_PAYLOAD_PATH="path to next boot stage binary image file"
+FW_PAYLOAD_ALIGN=0x1000
+FW_PAYLOAD_PATH=platform/hawks/Image
 # FW_PAYLOAD_FDT_OFFSET=0x2200000
 #
 # You can use fixed address for payload firmware as an alternative option.

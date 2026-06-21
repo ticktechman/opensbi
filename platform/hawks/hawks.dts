@@ -14,8 +14,19 @@
 
     // 2. 启动参数与控制台配置
     chosen {
-        stdout-path = "hvc0";
-        bootargs = "earlycon=sbi console=hvc0,115200";
+        stdout-path = "serial0:115200n8";
+        bootargs = "earlycon=sbi console=hvc0";
+    };
+		reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        /* 为 SBI 预留 2MB 内存 */
+        sbi_reserved: sbi@80000000 {
+            reg = <0x0 0x80000000 0x0 0x200000>;
+            no-map; // 关键属性：禁止内核为这段内存建立 MMU 页表映射
+        };
     };
 
     // 3. CPU 拓扑结构
