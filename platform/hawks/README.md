@@ -8,7 +8,8 @@
 # build busybox image
 
 ```bash
-make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- CFLAGS="-march=rv64ima -mabi=lp64" macvm_defconfig
+wget https://busybox.net/downloads/busybox-1.38.0.tar.bz2
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- CFLAGS="-march=rv64ima -mabi=lp64" hawks_busybox_defconfig
 make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- CFLAGS="-march=rv64ima -mabi=lp64" -j4
 sudo PATH="/home/ticktech/rv64tools/bin:$PATH" make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- CFLAGS="-march=rv64ima -mabi=lp64" CONFIG_PREFIX=../root install
 
