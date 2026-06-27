@@ -8,6 +8,7 @@
 !.editorconfig
 compile_commands.json
 sbi.hex
+platform/hawks/Image
 
 # Object files
 *.o
