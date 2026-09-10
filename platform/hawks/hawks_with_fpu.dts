@@ -1,0 +1,90 @@
+/dts-v1/;
+
+/ {
+    #address-cells = <2>;
+    #size-cells = <2>;
+    model = "Single Core RV64 Platform";
+    compatible = "single-core-rv64";
+
+    // 1. 内存/SRAM 节点
+    memory@80000000 {
+        device_type = "memory";
+        reg = <0x0 0x80000000 0x0 0x10000000>; // 256MB
+    };
+
+    // 2. 启动参数与控制台配置
+    chosen {
+        stdout-path = "serial0:115200n8";
+        bootargs = "earlycon=sbi console=hvc0 rdinit=/bin/ash initcall_debug loglevel=8 user_debug=31";
+    };
+		reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        /* 为 SBI 预留 2MB 内存 */
+        sbi_reserved: sbi@80000000 {
+            reg = <0x0 0x80000000 0x0 0x200000>;
+            no-map; // 关键属性：禁止内核为这段内存建立 MMU 页表映射
+        };
+    };
+
+    // 3. CPU 拓扑结构
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        timebase-frequency = <10000000>; // 10MHz 时钟频率
+
+        cpu0: cpu@0 {
+            device_type = "cpu";
+            reg = <0>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv64imafdc";
+						riscv,isa-base = "rv64i";
+						riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicsr", "zifencei";
+            mmu-type = "riscv,sv39";
+
+            // 中断控制器
+            cpu0_intc: interrupt-controller {
+                #interrupt-cells = <1>;
+                compatible = "riscv,cpu-intc";
+                interrupt-controller;
+            };
+        };
+    };
+
+    // 4. 系统级外设总线
+   soc {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        compatible = "simple-bus";
+        ranges;
+
+        // 5. ACLINT (MTIME / MSWI)
+        clint@2000000 {
+            compatible = "riscv,clint0";
+            reg = <0x0 0x2000000 0x0 0x10000>; // 64KB
+            interrupts-extended = <&cpu0_intc 3 &cpu0_intc 7>;
+        };
+
+        // 6. 8250 串口
+        serial0: serial@90001000 {
+            compatible = "ns16550a";
+            reg = <0x0 0x90001000 0x0 0x1000>; // 256字节
+            clock-frequency = <3686400>;
+            interrupt-parent = <&plic>;
+            interrupts = <1>;
+        };
+
+        // 7. PLIC (平台级中断控制器)
+        plic: interrupt-controller@c000000 {
+            compatible = "riscv,plic0";
+            reg = <0x0 0xc000000 0x0 0x4000000>;
+            #interrupt-cells = <1>;
+            interrupt-controller;
+            interrupts-extended = <&cpu0_intc 11>;
+            riscv,ndev = <15>;
+        };
+    };
+};
