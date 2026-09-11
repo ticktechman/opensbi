@@ -15,7 +15,7 @@
     // 2. 启动参数与控制台配置
     chosen {
         stdout-path = "serial0:115200n8";
-        bootargs = "earlycon=sbi console=hvc0 rdinit=/bin/ash initcall_debug loglevel=8 user_debug=31";
+        bootargs = "earlycon=sbi console=hvc0 rdinit=/sbin/init initcall_debug loglevel=8 user_debug=31";
     };
 		reserved-memory {
         #address-cells = <2>;
